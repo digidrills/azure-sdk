@@ -1,0 +1,12 @@
+{
+  "authority": "https://login.microsoftonline.com",
+  "client_id": "111111-111111111-111111111",
+  "scope": [
+    "https://graph.microsoft.com/.default"
+  ],
+  "secret": "83b381hh...........",
+  "endpoint": "https://graph.microsoft.com/v1.0/users",
+  "tenant_id": "11111111-1111111111-111111-1111111",
+  "username": "oinfoief==",
+  "password": "lqekfnwekf--"
+}
