@@ -11,3 +11,5 @@ Contains assistive flows to automate working with Files on OneDrive via the Micr
 ### Virtual Agents
 
 Contains basic outline flow for creating an interactive Chatbot on Microsoft Teams using Microsoft Power Virtual Agents
+# azure-sdk
+Samples for interactions with Azure security, deployments etc

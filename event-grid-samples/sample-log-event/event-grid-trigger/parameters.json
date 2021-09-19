@@ -1,0 +1,4 @@
+{
+    "key": "xxxxxxxxxxxxxxx",
+    "endpoint": "https://<endpoint-name>.<loc>.eventgrid.azure.net/api/events"
+}

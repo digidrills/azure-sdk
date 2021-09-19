@@ -1,0 +1,12 @@
+{
+  "authority": "https://login.microsoftonline.com",
+  "client_id": "<client-id>",
+  "scope": [
+    "https://graph.microsoft.com/.default"
+  ],
+  "secret": "<client-secret>",
+  "endpoint": "https://graph.microsoft.com/v1.0/users",
+  "tenant_id": "<tentant/directory-id>",
+  "username": "<base64 encoded username>",
+  "password": "<base64 encoded password>"
+}
