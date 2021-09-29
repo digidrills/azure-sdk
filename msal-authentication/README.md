@@ -17,12 +17,12 @@ The acquired access token can be stored as Serializable Token cache for repeated
 ### Accessing MS Graph
 We communicate with the Microsoft Graph service using REST APIs by sending POST requests to the ms-graph endpoint, for the case of our example we will be using the endpoint 
 
-                https://graph.microsoft.com/v1.0/drives/{drive_id}/root:/children
+        https://graph.microsoft.com/v1.0/drives/{drive_id}/root:/children
 
 This will give us details about all children items in the root folder of the authenticated user's onedrive. 
 To read more about the onedrive API with ms-graph refer to
-                
-                https://docs.microsoft.com/en-us/onedrive/developer/rest-api/resources/driveitem?view=odsp-graph-online
+
+        https://docs.microsoft.com/en-us/onedrive/developer/rest-api/resources/driveitem?view=odsp-graph-online
 
 *Note that to access items in a user's Shared directory, you must use the "/sharedWithMe" endpoint.*
 
