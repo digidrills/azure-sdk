@@ -20,3 +20,24 @@ This will give us details about all children items in the root folder of the aut
 To read more about the onedrive API with ms-graph refer to "https://docs.microsoft.com/en-us/onedrive/developer/rest-api/resources/driveitem?view=odsp-graph-online".
 
 *Note that to access items in a user's Shared directory, you must use the "/sharedWithMe" endpoint.*
+
+### Accessing files stored on a SharePoint site
+To get the files stored on a sharepoint site, you must first get the site ID of the SharePoint site who's files you are trying to access (It is assumed that you have the necessary authority to get the files from the SharePoint site you are trying to access. To know more about how to get the access_token for your credentials, refer to the Authentication section of this repository). This can be done by going to:
+
+        https://www.{tenant}.sharepoint.com/sites/{site-url}/_api/site/id
+From the browser.
+
+SharePoint sites also stores all files in an allocated OneDrive storage space and hence to access these files, you must use:
+
+        https://graph.microsoft.com/sites/{site-id}/drive/root/children
+
+This will list all the child items within the root directory of the sharepoint site.
+To access files within a specific folder, use:
+
+        https://graph.microsoft.com/sites/{site-id}/drive/root:/path/to/folder/children
+
+To access a specific file within a folder, use:
+
+        https://graph.microsoft.com/sites/{site-id}/drive/root:/path/to/file/content
+
+This will give us the file binary.

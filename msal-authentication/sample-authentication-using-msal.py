@@ -1,7 +1,7 @@
 # Some Important Points to keep in mind:
 # All fields populated withing the angular brackets (<>) are meant to be populated with your own values of the items
 # This code snippet uses the default caching method and caches the procured access token in memory as long as the RunTime lasts
-# the "#%%" Comment makes individual cells that can be run individually if you will be using Visual Studio Code as your development environment
+# the "#%%" Comment makes individual cells that can be run individually if you will be using Visual Studio Code as your development environment, refer to VS Code Documentation to learn more.
 
 #%%
 import json
