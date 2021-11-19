@@ -75,31 +75,30 @@ def get_calendar_events():
 
 # POSTs a new calendar event onto the user's default calendar
 # REQUIRES: subject, body, content, start and end datetime, location, attendees
-# TODO: need to add input fields for the calendar event data, currently present data is placeholder hardcoded data
 # TODO: the same json schema must be followed for sending a calendar event or a invalid payload error will be thrown
-def create_calendar_event():
+def create_calendar_event(subject, content, start_time, end_time, location, attendee_email, attendee_name):
     data = {
-        "subject": "Let's go for lunch",
+        "subject": f"{subject}",
         "body": {
             "contentType": "HTML",
-            "content": "Does late morning work for you?"
+            "content": f"{content}"
         },
         "start": {
-            "dateTime": "2019-06-16T12:00:00",
-            "timeZone": "Pacific Standard Time"
+            "dateTime": f"{start_time}",
+            "timeZone": "Indian Standard Time"
         },
         "end": {
-            "dateTime": "2019-06-16T14:00:00",
-            "timeZone": "Pacific Standard Time"
+            "dateTime": f"{end_time}",
+            "timeZone": "Indian Standard Time"
         },
         "location": {
-            "displayName": "Harry's Bar"
+            "displayName": f"{location}"
         },
         "attendees": [
             {
                 "emailAddress": {
-                    "address": "adelev@contoso.onmicrosoft.com",
-                    "name": "Adele Vance"
+                    "address": f"{attendee_email}",
+                    "name": f"{attendee_name}"
                 },
                 "type": "required"
             }
@@ -139,6 +138,13 @@ def get_chats():
     chatData = requests.patch(
         f"https://graph.microsoft.com/v1.0/me/chats/{get_chat_id('Test Group Chat 1')}/messages/19:962cd34f89824659b41ff976cf09d6ba@thread.v2", headers=headers, data=data)
     return chatData.json()
+
+# GETs the ID of the required team
+def get_team_id():
+    channelData = requests.get(
+        "https://graph.microsoft.com/v1.0/me/joinedTeams", headers=headers)
+    return channelData.json()['value'][1]['id']
+
 
 # the variables used for fetching the access_token from ms
 # TODO: Encryption of these variable important to maintain security
