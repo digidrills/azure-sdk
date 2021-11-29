@@ -286,6 +286,8 @@ def upload_file(file_name, file_path):
     return file_data.json()
 
 # download file
+
+
 def download_file(file_id):
     file_data = requests.get(
         f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/content",
@@ -294,6 +296,8 @@ def download_file(file_id):
     return file_data.json()
 
 # add guests to channel
+
+
 def add_guests_to_channel(channel_name, guest_email):
     channel_id = get_channel_id(channel_name)
     data = {
@@ -308,6 +312,17 @@ def add_guests_to_channel(channel_name, guest_email):
         f"https://graph.microsoft.com/v1.0/teams/{channel_id}/channels/{channel_id}/members",
         headers=headers,
         data=data,
+    )
+    return calData.json()
+
+# method to get channel members
+
+
+def get_channel_members(channel_name):
+    channel_id = get_channel_id(channel_name)
+    calData = requests.get(
+        f"https://graph.microsoft.com/v1.0/teams/{channel_id}/channels/{channel_id}/members",
+        headers=headers,
     )
     return calData.json()
 
