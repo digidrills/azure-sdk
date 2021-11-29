@@ -4,6 +4,7 @@ import requests
 from requests import Response
 from pprint import pprint
 import os
+import getpass
 
 # All text within angular brackets (<>) are meant to be replaced with your custom values of their respective fields.
 # TODO: Integration of all API methods and funtcions into a single program
@@ -19,7 +20,8 @@ def authorisation(client_username, client_password):
         client_credential=config["secret"],
     )
     result = app.acquire_token_by_username_password(
-        scopes=(config["scope"]), username=client_username, password=client_password
+        scopes=(config["scope"]
+                ), username=client_username, password=client_password
     )
     if "access_token" in result:
         print("Success")
@@ -131,14 +133,13 @@ def get_sharepoint_lists():
     return sharepointData.json()
 
 
-
-
 # GETs the ID of the required team
 def get_team_id():
     channelData = requests.get(
         "https://graph.microsoft.com/v1.0/me/joinedTeams", headers=headers
     )
     return channelData.json()["value"][1]["id"]
+
 
 def get_chat_id_from_teams(topic_name):
     group_chat_list = teams_get_chats()
@@ -165,17 +166,157 @@ def get_channel_id(channel_name):
     return "No such channel found, please check your spelling"
 
 # edit chat message in teams
+
+
 def edit_chat_message(message_id, message):
     data = {"body": {"content": f"{message}"}}
     data = json.dumps(data)
     sent_request = requests.patch(
-        f"https://graph.microsoft.com/v1.0/chats/{message_id}/messages", headers=headers, data=data)
+        f"h`ttps://graph.microsoft.com/v1.0/chats/{message_id}/messages", headers=headers, data=data)
     return sent_request.json()
 
+# create channel in teams
 
-# the variables used for fetching the access_token from ms
-# TODO: Encryption of these variable important to maintain security
-access_token = authorisation("<username>", "<password>")
+
+def create_channel(channel_name):
+    data = {"displayName": f"{channel_name}"}
+    data = json.dumps(data)
+    sent_request = requests.post(
+        "https://graph.microsoft.com/v1.0/me/joinedTeams", headers=headers, data=data)
+    return sent_request.json()
+
+# display calendar events
+
+
+def display_calendar_events():
+    calData = requests.get(
+        "https://graph.microsoft.com/v1.0/me/calendar/events", headers=headers
+    )
+    return calData.json()
+
+# post calendar event to channel
+
+
+def post_calendar_event_to_channel(subject, content, start_time, end_time, location, attendee_email, attendee_name, channel_name):
+    channel_id = get_channel_id(channel_name)
+    data = {
+        "subject": f"{subject}",
+        "body": {"contentType": "HTML", "content": f"{content}"},
+        "start": {"dateTime": f"{start_time}", "timeZone": "Indian Standard Time"},
+        "end": {"dateTime": f"{end_time}", "timeZone": "Indian Standard Time"},
+        "location": {"displayName": f"{location}"},
+        "attendees": [
+            {
+                "emailAddress": {
+                    "address": f"{attendee_email}",
+                    "name": f"{attendee_name}",
+                },
+                "type": "required",
+            }
+        ],
+    }
+    data = json.dumps(data)
+    calData = requests.post(
+        f"https://graph.microsoft.com/v1.0/teams/{channel_id}/channels/{channel_id}/messages",
+        headers=headers,
+        data=data,
+    )
+    return calData.json()
+
+# display call logs
+
+
+def display_call_logs():
+    callData = requests.get(
+        "https://graph.microsoft.com/v1.0/me/callRecords", headers=headers
+    )
+    return callData.json()
+
+
+def modify_calendar_event(subject, content, start_time, end_time, location, attendee_email, attendee_name, event_id):
+    data = {
+        "subject": f"{subject}",
+        "body": {"contentType": "HTML", "content": f"{content}"},
+        "start": {"dateTime": f"{start_time}", "timeZone": "Indian Standard Time"},
+        "end": {"dateTime": f"{end_time}", "timeZone": "Indian Standard Time"},
+        "location": {"displayName": f"{location}"},
+        "attendees": [
+            {
+                "emailAddress": {
+                    "address": f"{attendee_email}",
+                    "name": f"{attendee_name}",
+                },
+                "type": "required",
+            }
+        ],
+    }
+    data = json.dumps(data)
+    calData = requests.patch(
+        f"https://graph.microsoft.com/v1.0/me/calendar/events/{event_id}",
+        headers=headers,
+        data=data,
+    )
+    return calData.json()
+
+# delete calendar event
+
+
+def delete_calendar_event(event_id):
+    calData = requests.delete(
+        f"https://graph.microsoft.com/v1.0/me/calendar/events/{event_id}",
+        headers=headers,
+    )
+    return calData.json()
+
+# upload file
+
+
+def upload_file(file_name, file_path):
+    file_data = {
+        "name": f"{file_name}",
+        "description": "",
+        "folder": {"id": "root"},
+        "file": open(f"{file_path}", "rb"),
+    }
+    file_data = requests.post(
+        "https://graph.microsoft.com/v1.0/me/drive/root/children",
+        headers=headers,
+        files=file_data,
+    )
+    return file_data.json()
+
+# download file
+def download_file(file_id):
+    file_data = requests.get(
+        f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/content",
+        headers=headers,
+    )
+    return file_data.json()
+
+# add guests to channel
+def add_guests_to_channel(channel_name, guest_email):
+    channel_id = get_channel_id(channel_name)
+    data = {
+        "emailAddress": {
+            "address": f"{guest_email}",
+            "name": "",
+        },
+        "type": "required",
+    }
+    data = json.dumps(data)
+    calData = requests.post(
+        f"https://graph.microsoft.com/v1.0/teams/{channel_id}/channels/{channel_id}/members",
+        headers=headers,
+        data=data,
+    )
+    return calData.json()
+
+
+# the variables used for fetching the access_token from ms_graph
+# username and password accepted as secure string literal
+username = getpass.getuser()
+password = getpass.getpass()
+access_token = authorisation(f"{username}", f"{password}")
 headers = {
     "Authorization": "Bearer " + access_token,
     "Content-type": "application/json",
