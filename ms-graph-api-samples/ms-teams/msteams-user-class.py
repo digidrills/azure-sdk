@@ -337,4 +337,16 @@ headers = {
     "Content-type": "application/json",
 }
 
+# function to get channel id
+def get_channel_id(channel_name):
+    channel_id = ""
+    channel_data = requests.get(
+        "https://graph.microsoft.com/v1.0/me/joinedTeams", headers=headers
+    )
+    channel_data = channel_data.json()
+    for i in range(len(channel_data["value"])):
+        if channel_data["value"][i]["displayName"] == channel_name:
+            channel_id = channel_data["value"][i]["id"]
+    return channel_id
+
 pprint(get_chat_id_from_teams("Test Group Chat 1"))
